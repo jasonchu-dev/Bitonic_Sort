@@ -6,7 +6,7 @@
 using namespace std;
 
 void bitonicSort(int arr[], int n, int cd, int cBS, int stages) {
-    if (stages == 0) return;
+    if (stages == n) return;
     for (int i = cd; i > 0; i >>= 1) {
         int direction = 0, cnt = 0;
         for (int j = 0; j < n; j++) {
@@ -24,18 +24,7 @@ void bitonicSort(int arr[], int n, int cd, int cBS, int stages) {
             }
         }
     }
-    bitonicSort(arr, n, cd << 1, cBS << 1, stages - 1);
-}
-
-void bitonic(int arr[], int n) {
-    int stages = 0;
-    int cd = 1;
-    int cBS = 2;
-
-    for (int i = 1; i < n; i <<= 1)
-        stages++;
-
-    bitonicSort(arr, n, cd, cBS, stages);
+    bitonicSort(arr, n, cd << 1, cBS << 1, stages << 1);
 }
 
 int main() {
@@ -49,7 +38,11 @@ int main() {
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     shuffle(arr, arr + n, default_random_engine(seed));
     
-    bitonic(arr, n);
+    // start @ stage 1
+    // cd = 1
+    // cBS = 2
+
+    bitonicSort(arr, n, 1, 2, 1);
     cout << is_sorted(arr, arr + n);
 
     return 0;
